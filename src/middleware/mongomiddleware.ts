@@ -1,4 +1,4 @@
-import e, {Request, Response, NextFunction} from 'express';
+import {Request, Response, NextFunction} from 'express';
 import { Db, MongoClient } from 'mongodb';
 
 const mongoMiddleware = async (req: any, res: Response, next : NextFunction) => {

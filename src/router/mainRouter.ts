@@ -1,6 +1,7 @@
 import express, { Request, Response } from 'express';
 import transferrouter from './transfersRouter';
-// import userrouter from './UserRouter';
+import userRouter from './usersRouter';
+import authenMiddleware from '../middleware/authenticationMiddleware';
 
 const router = express.Router();
 
@@ -12,7 +13,7 @@ router.get("/", function (req: Request, res: Response) {
     })
 })
 
-// router.use('/auth', authRouter)
-router.use('/transfers', transferrouter)
+router.use('/api/users', userRouter)
+router.use('/api/transfers', authenMiddleware, transferrouter)
 
 export default router;

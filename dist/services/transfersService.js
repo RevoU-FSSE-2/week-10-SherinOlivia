@@ -25,7 +25,7 @@ const createTransfer = (req, res) => __awaiter(void 0, void 0, void 0, function*
     const { user_name, amount, purpose } = req.body;
     console.log(user_name, amount, purpose, `==== Transfer Request Information`);
     try {
-        const newTransfer = yield req.db.collection('transfers').insertOne({ user_name, amount, purpose });
+        const newTransfer = yield req.db.collection('transfers').insertOne({ user_name, amount, purpose, status: "Pending" });
         res.status(200).json({
             message: 'New Transfer Request Successfully Created',
             data: newTransfer
@@ -35,5 +35,31 @@ const createTransfer = (req, res) => __awaiter(void 0, void 0, void 0, function*
         res.status(500).json({ error });
     }
 });
-const transferData = { getAllTransfers, createTransfer };
+const approveTransfer = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        // const currentTransferReq = await req.db.collection('transfers').findOne({ _id : req.params._id});
+        // if (!currentTransferReq) {
+        //   res.status(404).json({ error: "Transfer Request not found..!" });
+        // } else if (currentTransferReq.status !== "Pending") {
+        //   res.status(400).json({ error: "Transfer Request status is not Pending..! Update Failed..!" });
+        // }
+        const updateTransReqStat = yield req.db.collection('transfer').findOneAndUpdate({ _id: req.params._id, status: "Pending" }, { $set: { status: "Approved" } }, { returnOriginal: false });
+        if (!updateTransReqStat) {
+            res.status(404).json({ error: "Transfer Request not found..!" });
+        }
+        else if (updateTransReqStat.value.status !== "Pending") {
+            res.status(400).json({ error: "Transfer Request status is not Pending..! Update Failed..!" });
+        }
+        else {
+            res.status(200).json({
+                message: "Transfer Request Status Updated Successfully..!",
+                data: updateTransReqStat.value
+            });
+        }
+    }
+    catch (error) {
+        res.status(500).json({ error: "Transfer Request Status Update Failed..!" });
+    }
+});
+const transferData = { getAllTransfers, createTransfer, approveTransfer };
 exports.default = transferData;

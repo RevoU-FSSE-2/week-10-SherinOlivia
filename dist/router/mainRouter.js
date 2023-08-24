@@ -5,7 +5,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const transfersRouter_1 = __importDefault(require("./transfersRouter"));
-// import userrouter from './UserRouter';
+const usersRouter_1 = __importDefault(require("./usersRouter"));
+const authenticationMiddleware_1 = __importDefault(require("../middleware/authenticationMiddleware"));
 const router = express_1.default.Router();
 // main app/page route
 router.get("/", function (req, res) {
@@ -14,6 +15,6 @@ router.get("/", function (req, res) {
         message: "Hello, this is Sherin Olivia's Assignment for Week 10"
     });
 });
-// router.use('/auth', authRouter)
-router.use('/transfers', transfersRouter_1.default);
+router.use('/api/users', usersRouter_1.default);
+router.use('/api/transfers', authenticationMiddleware_1.default, transfersRouter_1.default);
 exports.default = router;
