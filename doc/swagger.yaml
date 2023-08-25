@@ -4,55 +4,55 @@ info:
   description: "Week 10's Assignment - Transfer Request Management API with Authentication & Authorization"
   version: 1.0.0
 
-  servers:
-  - url: http://localhost:5115
-    description: Localhost Link for Development
-  - url: https://week10sherin-prod.up.railway.app/
-    description: Live link for Production
+servers:
+- url: http://localhost:5115
+  description: Localhost Link for Development
+- url: https://week10sherin-prod.up.railway.app/
+  description: Live link for Production
 
-  components:
-    securitySchemes:
-      bearer:
-        type: http
-        scheme: bearer
-        bearerFormat: JWT
-        description: 'Authentication & Authorization with JWTWebToken'
+components:
+  securitySchemes:
+    bearer:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: 'Authentication & Authorization with JWTWebToken'
 
-  paths:
-    /:
+paths:
+  /:
+    get:
+      summary: Homepage / Landing Page for NodeJs Project
+      responses:
+        '200':
+          description: 'Successfully reached the Deployed link of the Nodejs Project'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success: 
+                    type: boolean
+                  message:
+                    type: string
+  /api/transfers:
       get:
-        summary: Homepage / Landing Page for NodeJs Project
+        summary: Shows all transfer requests
         responses:
-          '200':
-            description: 'Successfully reached the Deployed link of the Nodejs Project'
+          '200':    
+            description: A JSON array of Transfer Requests
             content:
               application/json:
-                schema:
+                schema: 
                   type: object
                   properties:
-                    success: 
-                      type: boolean
                     message:
                       type: string
-    /api/transfers:
-        get:
-          summary: Shows all transfer requests
-          responses:
-            '200':    
-              description: A JSON array of Transfer Requests
-              content:
-                application/json:
-                  schema: 
-                    type: object
-                    properties:
-                      message:
-                        type: string
-                      data:
-                        type: array
-    /api/transfers/new:
-      post:
-        summary: Create new Transfer Request
-        RequestBody:
-          content:
-          application/json:
-              
+                    data:
+                      type: array
+  /api/transfers/new:
+    post:
+      summary: Create new Transfer Request
+      RequestBody:
+        content:
+        application/json:
+            
