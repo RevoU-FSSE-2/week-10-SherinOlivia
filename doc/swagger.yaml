@@ -145,6 +145,28 @@ paths:
               example:
                 error: Transfer Request Status Update Failed..!
   
+  /api/users:
+    get:
+      summary: Get all user data
+      responses:
+        '200':
+          description: All User data retrieved successfully
+          content:
+            application/json:
+              example:
+                message: All User Data Successfully Retrieved
+                data:
+                  - _id: "5f8a5f7a4b56a6778c1a2345"
+                    username: SH-Test
+                    role: Maker
+
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              example:
+                error: An error occurred while retrieving user data
+
   /api/users/register:
     post:
         summary: Register New User
@@ -178,7 +200,7 @@ paths:
                   message: User successfully registered
                   data:
                     _id: "5f8a5f7a4b56a6778c1a2345"
-                    username: john_doe
+                    username: SH-Test
                     role: Maker
           '400':
             description: Bad request
@@ -221,7 +243,7 @@ paths:
           content:
             application/json:
               example:
-                message: John Doe Successfully logged in as Maker
+                message: SH-Test Successfully logged in as Maker
                 data: jwt_token_here
         '400':
           description: Bad request or incorrect password

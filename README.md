@@ -1,7 +1,35 @@
 ## Week 10 Assignment Overview
 
-[![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-24ddc0f5d75046c5622901739e7c5dd533143b0c8e959d652212380cedb1ea36.svg)](https://classroom.github.com/a/zrfmWHEN)
+For Week 10's Assignment, we are to build a RESTful APIs (NodeJS App) that implements several features:
+- Hashed login data using **JWT**
+- Authentication and Authorization using **JWT**
+- **Swagger/ OpenAPI Spec** for API Documentation
+- Limitation on Username and Password (such as: no duplicate username and alphanumeric password)
+- Connection to MongoDB Database
 
+For this particular project, I'm using:
+- **Typescript** as the programming language
+- **MongoDB Atlas** for the database service.
+## API Endpoints
+<p align="center">
+<a href="https://week10sherin-prod.up.railway.app/">week10sherin-prod.up.railway.app/</a>
+</p> 
+<p align="center">
+<a href="https://week10sherin-prod.up.railway.app/api-docs/">Swagger UI Documentation</a>
+</p>
+
+<div align="center">
+
+| Name  | HTTP Method | Endpoint | Authentication | Authorization |
+| ----------- | ----------- | ----------- | ----------- | ----------- |
+| **Homepage** | `GET` |[/](https://week10sherin-prod.up.railway.app/) | ❌ | ❌ |
+| **List All Transfer Requests** | `GET` | [/api/transfers](https://week10sherin-prod.up.railway.app/api/transfers) | ✔ | ❌ |
+| **Create New Transfer Request** | `POST` | [/api/transfers/new](https://week10sherin-prod.up.railway.app/api/transfers/new) | ✔ | ❌ |
+| **Update Transfer Request Status** | `PATCH` | [/api/transfers/{_id}](https://week10sherin-prod.up.railway.app/api/transfers/64e69eecd9bfba9c379ce9af) | ✔ | ✔ |
+| **List All User Data** | `GET` | [/api/users](https://week10sherin-prod.up.railway.app/api/users) | ✔ | ✔ |
+| **Register New User** | `POST` | [/api/users/register](https://week10sherin-prod.up.railway.app/api/users/register) |  ❌ | ❌ |
+| **Login User** | `POST` | [/api/users/login](https://week10sherin-prod.up.railway.app/api/users/login) | ❌ | ❌ |
+</div>
 
 ### Contact Me:
 

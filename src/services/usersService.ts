@@ -4,6 +4,19 @@ import jwt, { Secret } from 'jsonwebtoken'
 import JWT_TOKEN from '../config/jwtconfig'
 import { error } from "console";
 
+const getAllUsers = async (req:any, res:Response) => {
+    try {
+      const users = await req.db.collection('users').find().toArray()
+      
+      res.status(200).json({
+        message: 'All User Data Successfully Retrieved',
+        data: users
+      })
+    } catch (error) {
+      res.status(500).json({ error })
+    }
+}
+
 const registerUser = async (req:any, res:Response, next:NextFunction) => {
     try {
         const { username, password, role } = req.body;
@@ -50,5 +63,5 @@ const loginUser =async (req:any, res: Response) => {
     }
 }
 
-const userData = { registerUser, loginUser }
+const userData = { getAllUsers, registerUser, loginUser }
 export default userData

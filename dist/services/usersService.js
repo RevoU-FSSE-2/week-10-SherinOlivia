@@ -16,6 +16,18 @@ const bcrypt_1 = __importDefault(require("bcrypt"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const jwtconfig_1 = __importDefault(require("../config/jwtconfig"));
 const console_1 = require("console");
+const getAllUsers = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const users = yield req.db.collection('users').find().toArray();
+        res.status(200).json({
+            message: 'All User Data Successfully Retrieved',
+            data: users
+        });
+    }
+    catch (error) {
+        res.status(500).json({ error });
+    }
+});
 const registerUser = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { username, password, role } = req.body;
@@ -59,5 +71,5 @@ const loginUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         res.status(500).json({ error });
     }
 });
-const userData = { registerUser, loginUser };
+const userData = { getAllUsers, registerUser, loginUser };
 exports.default = userData;
