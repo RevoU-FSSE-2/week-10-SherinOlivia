@@ -9,6 +9,6 @@ transferrouter.get('/', transferData.getAllTransfers);
 // post or create new transfer request
 transferrouter.post('/new', transferData.createTransfer);
 //  patch : update transfer status
-transferrouter.patch('/:_id', authorMiddleware, transferData.approveTransfer)
+transferrouter.patch('/:_id', authorMiddleware, transferData.updateTransferStatus)
 
 export default transferrouter

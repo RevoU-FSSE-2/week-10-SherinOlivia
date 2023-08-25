@@ -10,49 +10,213 @@ servers:
 - url: https://week10sherin-prod.up.railway.app/
   description: Live link for Production
 
-components:
-  securitySchemes:
-    bearer:
-      type: http
-      scheme: bearer
-      bearerFormat: JWT
-      description: 'Authentication & Authorization with JWTWebToken'
-
 paths:
-  /:
+  /api/transfers:
     get:
-      summary: Homepage / Landing Page for NodeJs Project
+      summary: Get all transfer requests
       responses:
         '200':
-          description: 'Successfully reached the Deployed link of the Nodejs Project'
+          description: Transfer requests retrieved successfully
+          content:
+            application/json:
+              example:
+                message: Transfer Requests Successfully Retrieved
+                data:
+                  - _id: "64e69eecd9bfba9c379ce9af"
+                    user_name: SH-Test
+                    amount: 200000
+                    purpose: Wealth Transfer P.2
+                    status: Approved
+                  - _id: "64e7dcc26983d9b0e21b781c"
+                    user_name: adminRoo
+                    amount: 2000
+                    purpose: Parking Ticket
+                    status: Pending
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              example:
+                error: An error occurred while retrieving transfer requests
+
+  /api/transfers/new:
+    post:
+      summary: Create a new transfer request
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                user_name:
+                  type: string
+                  description: Name of the user initiating the transfer
+                amount:
+                  type: number
+                  format: float
+                  description: Amount to be transferred
+                purpose:
+                  type: string
+                  description: Purpose of the transfer
+              required:
+                - user_name
+                - amount
+                - purpose
+      responses:
+        '200':
+          description: New transfer request created successfully
+          content:
+            application/json:
+              example:
+                message: New Transfer Request Successfully Created
+                data:
+                  _id: "64e7dcc26983d9b0e21b781c"
+                  user_name: adminRoo
+                  amount: 2000
+                  purpose: Parking Ticket
+                  status: Pending
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              example:
+                error: Transfer Request Failed - Internal Error
+
+  /api/transfers/{_id}:
+    patch:
+      summary: Update transfer status
+      parameters:
+        - name: _id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The ID of the transfer request
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                newStatus:
+                  type: string
+                  enum: [Approved, Rejected]
+                  description: The new status for the transfer request
+      responses:
+        '200':
+          description: Transfer request status updated successfully
+          content:
+            application/json:
+              example:
+                message: Transfer Request Status Updated Successfully..!
+                data:
+                  _id: "64e69eecd9bfba9c379ce9af"
+                  status: Approved
+        '400':
+          description: Bad request or update failed
+          content:
+            application/json:
+              example:
+                error: Transfer Request status is not Pending..! Update Failed..!
+        '404':
+          description: Transfer request not found
+          content:
+            application/json:
+              example:
+                error: Transfer Request not found..!
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              example:
+                error: Transfer Request Status Update Failed..!
+  
+  /api/users/register:
+    post:
+        summary: Register New User
+        requestBody:
+          required: true
           content:
             application/json:
               schema:
                 type: object
                 properties:
-                  success: 
-                    type: boolean
-                  message:
+                  username:
                     type: string
-  /api/transfers:
-      get:
-        summary: Shows all transfer requests
+                    description: User's username
+                  password:
+                    type: string
+                    description: User's password
+                  role:
+                    type: string
+                    enum: [Approver, Maker]
+                    description: User's role (Approver or Maker)
+                required:
+                  - username
+                  - password
+                  - role
         responses:
-          '200':    
-            description: A JSON array of Transfer Requests
+          '200':
+            description: User successfully registered
             content:
               application/json:
-                schema: 
-                  type: object
-                  properties:
-                    message:
-                      type: string
-                    data:
-                      type: array
-  /api/transfers/new:
+                example:
+                  message: User successfully registered
+                  data:
+                    _id: "5f8a5f7a4b56a6778c1a2345"
+                    username: john_doe
+                    role: Maker
+          '400':
+            description: Bad request
+            content:
+              application/json:
+                example:
+                  error: Invalid role..! Available Roles = Approver or Maker.
+          '500':
+            description: Internal server error
+            content:
+              application/json:
+                example:
+                  error: Invalid Register Request..!!
+
+  /api/users/login:
     post:
-      summary: Create new Transfer Request
-      RequestBody:
+      summary: Login a user
+      requestBody:
+        required: true
         content:
-        application/json:
-            
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                  description: User's username
+                password:
+                  type: string
+                  description: User's password
+              required:
+                - username
+                - password
+      responses:
+        '200':
+          description: User successfully logged in
+          content:
+            application/json:
+              example:
+                message: John Doe Successfully logged in as Maker
+                data: jwt_token_here
+        '400':
+          description: Bad request or incorrect password
+          content:
+            application/json:
+              example:
+                error: Password is incorrect
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              example:
+                error: An error occurred while logging in

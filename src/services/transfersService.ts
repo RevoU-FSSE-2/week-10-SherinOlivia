@@ -31,10 +31,12 @@ const getAllTransfers = async (req:any, res:Response) => {
     }
   }
 
-  const approveTransfer = async (req:any, res:Response) => { 
+  const updateTransferStatus = async (req:any, res:Response) => { 
     try {
       const _id = new ObjectId(req.params._id)
-      const updateTransReqStat = await req.db.collection('transfers').findOneAndUpdate({ _id, status: "Pending"}, {$set: {status: "Approved" }}, {returnOriginal: false});
+      const { newStatus }= req.body
+      const updateTransReqStat = await req.db.collection('transfers').findOneAndUpdate({ _id, status: "Pending"}, {$set: {status: newStatus} }, {returnOriginal: false});
+
 
       if (updateTransReqStat.value === null) {
         console.log("Transfer Request Status Update checking..")
@@ -43,6 +45,8 @@ const getAllTransfers = async (req:any, res:Response) => {
       } else if (updateTransReqStat.value.status !== "Pending") {
         res.status(400).json({ error: "Transfer Request status is not Pending..! Update Failed..!" });
         console.log("Transfer Request Status Update: 'Pending' checking..")
+      } else if (newStatus !== "Approved" || newStatus !== "Rejected" ) {
+        res.status(400).json({ error: "Update Transfer Request Status invalid..! 'Approved or Rejected value only!'" });
       } else {
         console.log(`Transfer Request Status Update checking.., ${JSON.stringify(updateTransReqStat)}`)
         res.status(200).json({
@@ -58,5 +62,5 @@ const getAllTransfers = async (req:any, res:Response) => {
   }
 
 
-  const transferData = { getAllTransfers, createTransfer, approveTransfer }
+  const transferData = { getAllTransfers, createTransfer, updateTransferStatus }
   export default transferData

@@ -36,10 +36,11 @@ const createTransfer = (req, res) => __awaiter(void 0, void 0, void 0, function*
         res.status(500).json({ error });
     }
 });
-const approveTransfer = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const updateTransferStatus = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const _id = new mongodb_1.ObjectId(req.params._id);
-        const updateTransReqStat = yield req.db.collection('transfers').findOneAndUpdate({ _id, status: "Pending" }, { $set: { status: "Approved" } }, { returnOriginal: false });
+        const { newStatus } = req.body;
+        const updateTransReqStat = yield req.db.collection('transfers').findOneAndUpdate({ _id, status: "Pending" }, { $set: { status: newStatus } }, { returnOriginal: false });
         if (updateTransReqStat.value === null) {
             console.log("Transfer Request Status Update checking..");
             res.status(404).json({ error: "Transfer Request not found..!" });
@@ -47,6 +48,9 @@ const approveTransfer = (req, res) => __awaiter(void 0, void 0, void 0, function
         else if (updateTransReqStat.value.status !== "Pending") {
             res.status(400).json({ error: "Transfer Request status is not Pending..! Update Failed..!" });
             console.log("Transfer Request Status Update: 'Pending' checking..");
+        }
+        else if (newStatus !== "Approved" || newStatus !== "Rejected") {
+            res.status(400).json({ error: "Update Transfer Request Status invalid..! 'Approved or Rejected value only!'" });
         }
         else {
             console.log(`Transfer Request Status Update checking.., ${JSON.stringify(updateTransReqStat)}`);
@@ -61,5 +65,5 @@ const approveTransfer = (req, res) => __awaiter(void 0, void 0, void 0, function
         res.status(500).json({ error: "Transfer Request Status Update Failed..!" });
     }
 });
-const transferData = { getAllTransfers, createTransfer, approveTransfer };
+const transferData = { getAllTransfers, createTransfer, updateTransferStatus };
 exports.default = transferData;

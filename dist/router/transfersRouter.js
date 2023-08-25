@@ -12,5 +12,5 @@ transferrouter.get('/', transfersService_1.default.getAllTransfers);
 // post or create new transfer request
 transferrouter.post('/new', transfersService_1.default.createTransfer);
 //  patch : update transfer status
-transferrouter.patch('/:_id', authorizationMiddleware_1.default, transfersService_1.default.approveTransfer);
+transferrouter.patch('/:_id', authorizationMiddleware_1.default, transfersService_1.default.updateTransferStatus);
 exports.default = transferrouter;
