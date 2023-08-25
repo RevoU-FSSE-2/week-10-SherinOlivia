@@ -180,6 +180,7 @@ paths:
                   username:
                     type: string
                     minLength: 3
+                    pattern: "^(?=.*[^\\s]).{3,}$"
                     description: User's username
                   password:
                     type: string
