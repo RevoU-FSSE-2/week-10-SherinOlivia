@@ -193,9 +193,12 @@ paths:
               properties:
                 username:
                   type: string
+                  minLength: 3
                   description: User's username
                 password:
                   type: string
+                  minLength: 8
+                  pattern: "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]+$"
                   description: User's password
               required:
                 - username

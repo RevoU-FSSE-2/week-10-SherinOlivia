@@ -32,7 +32,7 @@ require("dotenv/config");
 const mainRouter_1 = __importDefault(require("./router/mainRouter"));
 const swagger_ui_express_1 = __importDefault(require("swagger-ui-express"));
 const yaml_1 = __importDefault(require("yaml"));
-const fs = __importStar(require("node:fs"));
+const fs = __importStar(require("fs"));
 const OpenApiValidator = __importStar(require("express-openapi-validator"));
 const port = process.env.PORT;
 const app = (0, express_1.default)();

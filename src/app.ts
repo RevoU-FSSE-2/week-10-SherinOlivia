@@ -4,7 +4,7 @@ import 'dotenv/config'
 import router from './router/mainRouter';
 import swaggerUi from 'swagger-ui-express';
 import yaml from 'yaml';
-import * as fs from 'node:fs';
+import * as fs from 'fs';
 import * as OpenApiValidator from 'express-openapi-validator';
 
 const port = process.env.PORT;
