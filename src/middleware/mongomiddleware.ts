@@ -1,9 +1,10 @@
 import {Request, Response, NextFunction} from 'express';
 import { Db, MongoClient } from 'mongodb';
+const uri = 'mongodb+srv://sherinolivia:1cnnT7z2AXpZOrfC@cluster0.gfhpnoq.mongodb.net/?retryWrites=true&w=majority'
 
 const mongoMiddleware = async (req: any, res: Response, next : NextFunction) => {
     try {
-        const mongoClient = await new MongoClient('mongodb://127.0.0.1:27017').connect();
+        const mongoClient = await new MongoClient(uri).connect();
         const db: Db = mongoClient.db('week10-mbanking');
     
         req.db = db

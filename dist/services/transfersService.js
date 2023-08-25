@@ -9,11 +9,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+const mongodb_1 = require("mongodb");
 const getAllTransfers = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const transfers = yield req.db.collection('transfers').find().toArray();
         res.status(200).json({
-            message: 'Transactions data successfully retrieved',
+            message: 'Transfer Requests Successfully Retrieved',
             data: transfers
         });
     }
@@ -37,27 +38,26 @@ const createTransfer = (req, res) => __awaiter(void 0, void 0, void 0, function*
 });
 const approveTransfer = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        // const currentTransferReq = await req.db.collection('transfers').findOne({ _id : req.params._id});
-        // if (!currentTransferReq) {
-        //   res.status(404).json({ error: "Transfer Request not found..!" });
-        // } else if (currentTransferReq.status !== "Pending") {
-        //   res.status(400).json({ error: "Transfer Request status is not Pending..! Update Failed..!" });
-        // }
-        const updateTransReqStat = yield req.db.collection('transfer').findOneAndUpdate({ _id: req.params._id, status: "Pending" }, { $set: { status: "Approved" } }, { returnOriginal: false });
-        if (!updateTransReqStat) {
+        const _id = new mongodb_1.ObjectId(req.params._id);
+        const updateTransReqStat = yield req.db.collection('transfers').findOneAndUpdate({ _id, status: "Pending" }, { $set: { status: "Approved" } }, { returnOriginal: false });
+        if (updateTransReqStat.value === null) {
+            console.log("Transfer Request Status Update checking..");
             res.status(404).json({ error: "Transfer Request not found..!" });
         }
         else if (updateTransReqStat.value.status !== "Pending") {
             res.status(400).json({ error: "Transfer Request status is not Pending..! Update Failed..!" });
+            console.log("Transfer Request Status Update: 'Pending' checking..");
         }
         else {
+            console.log(`Transfer Request Status Update checking.., ${JSON.stringify(updateTransReqStat)}`);
             res.status(200).json({
                 message: "Transfer Request Status Updated Successfully..!",
-                data: updateTransReqStat.value
+                data: updateTransReqStat.value,
             });
         }
     }
     catch (error) {
+        console.error(error);
         res.status(500).json({ error: "Transfer Request Status Update Failed..!" });
     }
 });

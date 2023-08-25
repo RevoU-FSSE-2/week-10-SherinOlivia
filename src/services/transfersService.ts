@@ -1,11 +1,12 @@
 import {Request, Response, NextFunction} from 'express';
+import { ObjectId } from 'mongodb';
 
 const getAllTransfers = async (req:any, res:Response) => {
     try {
       const transfers = await req.db.collection('transfers').find().toArray()
       
       res.status(200).json({
-        message: 'Transactions data successfully retrieved',
+        message: 'Transfer Requests Successfully Retrieved',
         data: transfers
       })
     } catch (error) {
@@ -32,28 +33,27 @@ const getAllTransfers = async (req:any, res:Response) => {
 
   const approveTransfer = async (req:any, res:Response) => { 
     try {
-      // const currentTransferReq = await req.db.collection('transfers').findOne({ _id : req.params._id});
+      const _id = new ObjectId(req.params._id)
+      const updateTransReqStat = await req.db.collection('transfers').findOneAndUpdate({ _id, status: "Pending"}, {$set: {status: "Approved" }}, {returnOriginal: false});
 
-      // if (!currentTransferReq) {
-      //   res.status(404).json({ error: "Transfer Request not found..!" });
-      // } else if (currentTransferReq.status !== "Pending") {
-      //   res.status(400).json({ error: "Transfer Request status is not Pending..! Update Failed..!" });
-      // }
-
-      const updateTransReqStat = await req.db.collection('transfer').findOneAndUpdate({ _id : req.params._id, status: "Pending"}, {$set: {status: "Approved" }}, {returnOriginal: false})
-      
-      if (!updateTransReqStat) {
+      if (updateTransReqStat.value === null) {
+        console.log("Transfer Request Status Update checking..")
         res.status(404).json({ error: "Transfer Request not found..!" });
+        
       } else if (updateTransReqStat.value.status !== "Pending") {
         res.status(400).json({ error: "Transfer Request status is not Pending..! Update Failed..!" });
+        console.log("Transfer Request Status Update: 'Pending' checking..")
       } else {
+        console.log(`Transfer Request Status Update checking.., ${JSON.stringify(updateTransReqStat)}`)
         res.status(200).json({
           message: "Transfer Request Status Updated Successfully..!",
-          data: updateTransReqStat.value
+          data: updateTransReqStat.value,
         })
       }
     } catch (error) {
+      console.error(error)
       res.status(500).json({ error: "Transfer Request Status Update Failed..!" });
+      
     }
   }
 

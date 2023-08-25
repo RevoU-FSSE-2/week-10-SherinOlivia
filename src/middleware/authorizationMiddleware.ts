@@ -14,10 +14,11 @@ const authorMiddleware = (req: Request, res: Response, next: NextFunction) => {
             const decodedToken:any = jwt.verify(secretToken, JWT_TOKEN as Secret) 
 
             if (decodedToken.role === "Approver") {
-                
+                next()
+                console.log(decodedToken, `= Decode test`)
+            } else {
+                res.status(400).json({error : "Unauthorized Access!!!"})
             }
-            console.log(decodedToken, `= Decode test`)
-            next()
         }catch (error) {
             res.status(400).json({error: error})
         }

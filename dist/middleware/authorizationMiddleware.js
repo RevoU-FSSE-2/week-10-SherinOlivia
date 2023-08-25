@@ -15,9 +15,12 @@ const authorMiddleware = (req, res, next) => {
         try {
             const decodedToken = jsonwebtoken_1.default.verify(secretToken, jwtconfig_1.default);
             if (decodedToken.role === "Approver") {
+                next();
+                console.log(decodedToken, `= Decode test`);
             }
-            console.log(decodedToken, `= Decode test`);
-            next();
+            else {
+                res.status(400).json({ error: "Unauthorized Access!!!" });
+            }
         }
         catch (error) {
             res.status(400).json({ error: error });

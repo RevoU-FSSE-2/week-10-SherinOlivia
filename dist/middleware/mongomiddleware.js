@@ -10,9 +10,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongodb_1 = require("mongodb");
+const uri = 'mongodb+srv://sherinolivia:1cnnT7z2AXpZOrfC@cluster0.gfhpnoq.mongodb.net/?retryWrites=true&w=majority';
 const mongoMiddleware = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const mongoClient = yield new mongodb_1.MongoClient('mongodb://127.0.0.1:27017').connect();
+        const mongoClient = yield new mongodb_1.MongoClient(uri).connect();
         const db = mongoClient.db('week10-mbanking');
         req.db = db;
         if (db) {
