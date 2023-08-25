@@ -11,6 +11,18 @@ servers:
   description: Live link for Production
 
 paths:
+  /:
+    get:
+      summary: Project Landing Page
+      responses:
+        '200':
+          description: Successfully reached Project Landing Page
+          content:
+            application/json:
+              example:
+                success: true
+                message: Hello, this is Sherin Olivia's Assignment for Week 10
+
   /api/transfers:
     get:
       summary: Get all transfer requests
